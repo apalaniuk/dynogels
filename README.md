@@ -767,6 +767,49 @@ BlogPost
 
 See the queryFilter.js [example][0] for more examples of using query filters
 
+#### Transactions
+
+```javascript
+dynogels.transaction
+  .write()
+  .items([
+      BlogPost.transaction.modify({
+          email: 'werner@example.com',
+          title: 'First Post', {
+              UpdateExpression: 'SET body = :body',
+              ExpressionAttributeValues: {
+                  ':body': 'Updating an existing post; expression syntax must be used for advanced features'
+              },
+          }
+      }),
+      BlogPost.transaction.create({
+          email: 'werner@example.com',
+          title: 'Second Post',
+      }),
+      BlogPost.transaction.create({
+          email: 'werner@example.com',
+          title: 'Third Post',
+      }),
+  ])
+  .exec();
+```
+
+```javascript
+dynogels.transaction
+  .get()
+  .items([
+      BlogPost.transaction.get({
+          email: 'werner@example.com',
+          title: 'First Post',
+      }),
+      BlogPost.transaction.get({
+          email: 'werner@example.com',
+          title: 'Second Post'
+      }),
+  ])
+  .exec();
+```
+
 #### Global Indexes
 
 First, define a model with a global secondary index.
